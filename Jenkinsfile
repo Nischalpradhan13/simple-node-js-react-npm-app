@@ -1,31 +1,79 @@
 pipeline {
-    agent {
-        docker {
-            image 'node:6-alpine'
-            args '-p 3000:3000'
-        }
+    agent { label "Alma" }  // This specifies your Alma Linux agent
+    
+    environment {
+        CI = 'true'
+        // Add Docker registry info if needed
+        // DOCKER_REGISTRY = 'your-registry'
     }
-     environment {
-            CI = 'true'
-        }
+    
     stages {
-        stage('Build') {
+        stage('Setup') {
             steps {
-                sh 'npm install'
+                // Ensure Docker is available on agent
+                sh 'docker --version'
+                
+                // Pull the Node image
+                sh 'docker pull node:6-alpine'
             }
         }
+        
+        stage('Build') {
+            steps {
+                // Run npm install inside Docker container
+                sh '''
+                    docker run --rm \
+                    -v "${WORKSPACE}:/app" \
+                    -w "/app" \
+                    node:6-alpine \
+                    npm install
+                '''
+            }
+        }
+        
         stage('Test') {
-                    steps {
-                        sh './jenkins/scripts/test.sh'
-                    }
-                }
-                stage('Deliver') {
-                            steps {
-                                sh './jenkins/scripts/deliver.sh'
-                                input message: 'Finished using the web site? (Click "Proceed" to continue)'
-                                sh './jenkins/scripts/kill.sh'
-                            }
-                        }
-
+            steps {
+                // Make script executable
+                sh 'chmod +x ./jenkins/scripts/test.sh'
+                
+                // Run tests inside Docker container
+                sh '''
+                    docker run --rm \
+                    -v "${WORKSPACE}:/app" \
+                    -w "/app" \
+                    node:6-alpine \
+                    ./jenkins/scripts/test.sh
+                '''
+            }
+        }
+        
+        stage('Deliver') {
+            steps {
+                // Make scripts executable
+                sh '''
+                    chmod +x ./jenkins/scripts/deliver.sh
+                    chmod +x ./jenkins/scripts/kill.sh
+                '''
+                
+                // Run deliver script in Docker
+                sh '''
+                    docker run --rm \
+                    -v "${WORKSPACE}:/app" \
+                    -w "/app" \
+                    -p 3000:3000 \
+                    -d \
+                    --name node-app \
+                    node:6-alpine \
+                    ./jenkins/scripts/deliver.sh
+                '''
+                
+                input message: 'Finished using the web site? (Click "Proceed" to continue)'
+                
+                // Kill the container
+                sh 'docker stop node-app || true'
+                sh 'docker rm node-app || true'
+                sh './jenkins/scripts/kill.sh'
+            }
+        }
     }
 }
