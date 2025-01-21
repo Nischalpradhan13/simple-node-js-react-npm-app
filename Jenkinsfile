@@ -3,8 +3,6 @@ pipeline {
     
     environment {
         CI = 'true'
-        // Add Docker registry info if needed
-        // DOCKER_REGISTRY = 'your-registry'
     }
     
     stages {
@@ -33,27 +31,22 @@ pipeline {
         
         stage('Test') {
             steps {
-                // Make script executable
-                sh 'chmod +x ./jenkins/scripts/test.sh'
-                
-                // Run tests inside Docker container
+                // Run tests inside Docker container with CI mode
                 sh '''
                     docker run --rm \
                     -v "${WORKSPACE}:/app" \
                     -w "/app" \
+                    -e CI=true \
                     node:6-alpine \
-                    ./jenkins/scripts/test.sh
+                    npm test -- --watchAll=false
                 '''
             }
         }
         
         stage('Deliver') {
             steps {
-                // Make scripts executable
-                sh '''
-                    chmod +x ./jenkins/scripts/deliver.sh
-                    chmod +x ./jenkins/scripts/kill.sh
-                '''
+                // Make deliver script executable
+                sh 'chmod +x ./jenkins/scripts/deliver.sh'
                 
                 // Run deliver script in Docker
                 sh '''
@@ -72,7 +65,6 @@ pipeline {
                 // Kill the container
                 sh 'docker stop node-app || true'
                 sh 'docker rm node-app || true'
-                sh './jenkins/scripts/kill.sh'
             }
         }
     }
