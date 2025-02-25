@@ -33,7 +33,7 @@ pipeline {
                 sshPublisher(publishers: [sshPublisherDesc(configName: 'Alma_Linux', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: '''cd /root/nodeapp
 npm install
 npm run start
-sudo systemctl restart nginx''', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '\'build/**, package.json, package-lock.json\'')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+sudo systemctl restart nginx''', flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '\'build/**, package.json, package-lock.json\'')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
             }
         }
     }
