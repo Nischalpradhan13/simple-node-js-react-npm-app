@@ -4,7 +4,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 // Checkout the branch from the Git repository
-                git branch: 'test', url: 'https://github.com/Nischalpradhan13/simple-node-js-react-npm-app.git'
+                git branch: 'master', url: 'https://github.com/Nischalpradhan13/simple-node-js-react-npm-app.git'
             }
         }
         stage('Setup') {
@@ -29,11 +29,24 @@ pipeline {
             }
         }
         stage('Deploy to Alma Linux') {
-            steps {
-                sshPublisher(publishers: [sshPublisherDesc(configName: 'Alma_linux_withoutpath', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: '''cd /root/test
-npm install
-npm run start''', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '/root/test', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '\'package.json, package-lock.json, build/**\'')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
-            }
+             steps {
+        sshPublisher(publishers: [sshPublisherDesc(configName: 'Alma_Linux_Config', 
+            transfers: [
+                sshTransfer(cleanRemote: false, 
+                    excludes: '', 
+                    execCommand: 'cd /root/test && npm install && npm run start',  
+                    flatten: false, 
+                    makeEmptyDirs: false, 
+                    noDefaultExcludes: false, 
+                    patternSeparator: '[, ]+', 
+                    remoteDirectory: '/root/test',  
+                    remoteDirectorySDF: false, 
+                    removePrefix: '', 
+                    sourceFiles: 'build/**, package.json, package-lock.json')],
+            usePromotionTimestamp: false, 
+            useWorkspaceInPromotion: false, 
+            verbose: false)])
+             }
         }
     }
 }
