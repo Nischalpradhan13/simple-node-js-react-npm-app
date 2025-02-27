@@ -30,9 +30,11 @@ pipeline {
         }
         stage('Deploy to Alma Linux') {
              steps {
-        sshPublisher(publishers: [sshPublisherDesc(configName: 'Alma_linux_withoutpath', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: '''cd /root/test
+                sshPublisher(publishers: [sshPublisherDesc(configName: 'Alma_linux_withoutpath', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'rm -rf testapp/*;', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '', remoteDirectorySDF: false, removePrefix: '', sourceFiles: ''), sshTransfer(cleanRemote: false, excludes: '', execCommand: '''cd testapp
 npm install
-npm run start''', flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '/root/test', remoteDirectorySDF: false, removePrefix: '', sourceFiles: 'build/**, package.json, package-lock.json')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+npm run build
+pm2 start npm --name "testapp" -- start''', execTimeout: 360000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '/root/testapp', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '**/**')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+        
              }
         }
     }
