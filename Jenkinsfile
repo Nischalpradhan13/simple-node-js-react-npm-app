@@ -30,7 +30,7 @@ pipeline {
         }
         stage('Deploy to Alma Linux') {
              steps {
-        sshPublisher(publishers: [sshPublisherDesc(configName: 'Alma_Linux_Config', 
+        sshPublisher(publishers: [sshPublisherDesc(configName: 'Alma_linux_withoutpath', 
             transfers: [
                 sshTransfer(cleanRemote: false, 
                     excludes: '', 
