@@ -32,7 +32,7 @@ pipeline {
             steps {
                 sshPublisher(publishers: [sshPublisherDesc(configName: 'Alma_linux_withoutpath', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: '''cd /root/test
 npm install
-npm run start''', execTimeout: 360000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '/root/test', remoteDirectorySDF: false, removePrefix: '', sourceFiles: 'package.json, package-lock.json, build/**')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+npm run start''', flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '/root/test', remoteDirectorySDF: false, removePrefix: '', sourceFiles: 'package.json, package-lock.json, build/**')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
             }
         }
     }
