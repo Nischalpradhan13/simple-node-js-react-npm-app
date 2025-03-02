@@ -14,6 +14,10 @@ class App extends Component {
           To get started, edit <code>src/App.js</code> and save to reload.
           Deployment Successful in March 2 using CICD with Jenkins
         </p>
+        <p className="App-intro">
+          To get started, edit <code>src/App.js</code> and save to reload.
+          Deployment Successful in March 2 using CICD with Jenkins
+        </p>
       </div>
     );
   }
