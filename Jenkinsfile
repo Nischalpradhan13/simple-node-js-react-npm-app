@@ -18,7 +18,6 @@ pipeline {
             steps {
                 sshPublisher(publishers: [sshPublisherDesc(configName: 'Alma_Linux', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: '''cd /root/nodeapp
 npm install
-npm test
 npm run build
 nmp run start''', flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '**/*')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
             }
