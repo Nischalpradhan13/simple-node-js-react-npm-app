@@ -26,6 +26,11 @@ class App extends Component {
           To get started, edit <code>src/App.js</code> and save to reload.
           Hello There! Is there any problem
         </p>
+        <p className="App-intro">
+          Mero din barbad bho yaad da ma tmro feri,
+          Bihani ko surwat bho yaad da ma tmro feri,
+          Udi udi mana bagxa kina, tmrai tira hera bhana k garum ma
+        </p>
         
       </div>
     );
